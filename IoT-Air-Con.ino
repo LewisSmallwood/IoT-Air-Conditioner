@@ -90,13 +90,16 @@ void initWebServer() {
  */
 void handleRequest() {
   String endpoint = server.uri();;
+  if (endpoint == "/") return server.send(200, "text/plain", "This is the Air Conditioner API. Please contact Bespoke Technology Labs for more information.");
   if (endpoint.length() > 1) endpoint = endpoint.substring(1);
 
   for (Button button : buttons) {
     if (button.title == endpoint) return toggleButton(button);
   }
-  
-  server.send(200, "text/plain", "This is the Air Conditioner API. Please contact Bespoke Technology Labs for more information.");
+
+  // If not found, redirect to home.
+  server.sendHeader("Location", String("/"), true);
+  server.send(302, "text/plain", "");
 }
 
 /**
