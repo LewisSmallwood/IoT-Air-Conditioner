@@ -24,11 +24,11 @@ Rather than using relays to toggle the buttons, opto-isolators were used to avoi
 ### Circuit
 Here is the wiring:
 
-![Circuit Wiring](https://bespoke.dev/assets/images/projects/iot-air-con/1.png | width=256)
+<img src="https://bespoke.dev/assets/images/projects/iot-air-con/1.png" alt="Circuit Wiring" width="600">
 
 The buttons on the panel are still usable externally:
 
-![Control Panel](https://bespoke.dev/assets/images/projects/iot-air-con/4.png | width=256)
+<img src="https://bespoke.dev/assets/images/projects/iot-air-con/4.png" alt="Control Panel" width="400">
 
 ## Software
 ### Environment Variables
