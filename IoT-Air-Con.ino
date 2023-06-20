@@ -3,6 +3,7 @@
  */
 #include <Arduino.h>
 #include "./environment.h"
+#include "./temperature.h"
 #include <ESP8266WiFi.h>
 #include <ESP8266WiFiMulti.h>
 #include <ESP8266WebServer.h>
@@ -93,6 +94,10 @@ void handleRequest() {
   if (endpoint == "/") return server.send(200, "text/plain", "This is the Air Conditioner API. Please contact Bespoke Technology Labs for more information.");
   if (endpoint.length() > 1) endpoint = endpoint.substring(1);
 
+  // Handle temperature monitoring.
+  if (endpoint == "temperature") return server.send(200, "application/json", "{\"temperature\": "+String(getTemperature())+"}");
+
+  // Handle button toggles.
   for (Button button : buttons) {
     if (button.title == endpoint) return toggleButton(button);
   }
@@ -112,6 +117,7 @@ void toggleButton(Button button) {
   server.send(200, "text/plain", "The "+button.title+" button on the air conditioner has been toggled.");
 }
 
+
 /**
  * Setup
  */
@@ -128,4 +134,5 @@ void setup() {
 void loop() {
   if (WiFi.status() != WL_CONNECTED) connectToWiFi("Reconnecting");
   server.handleClient();
+  handleTemperatureProbe();
 }
