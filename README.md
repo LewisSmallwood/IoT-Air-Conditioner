@@ -1,21 +1,45 @@
-# IoT-Air-Conditioner
+# IoT Air Conditioner
 My internet-connected portable air conditioning unit with power, speed, and temperature controls via a HTTP API.
 
+## Brief
+This project is a hardware and software solution that allows the existing functions of a portable air conditioner to be controlled over the Internet.
+
+The air conditioning unit has buttons on it to control power, speed, operating modes, temperature, and the timer function.
+
+I wanted to be able to control these functions over the internet, so I could turn on and off the unit from my phone.
+
+The air conditioning unit used for the project was an Arlec 5000 BTU portable air conditioner, but the same implementation can be used for all air conditioners.
+
 ## Hardware
-The code runs on an ESP8266 microcontroller. The controller is wired to the push buttons on the air conditioner control panel.
+To enable the control of the unit over the internet, an ESP8266 microcontroller was used which is a low-cost WiFi connected microcontroller.
 
-The existing push buttons on the control panel have been hooked into and wired into the microcontroller.
+The controller was wired up to the push buttons on the control panel of the air conditioner.
 
-Rather than using relays to control the circuits, opto-isolators were used instead to avoid annoying clicking sounds.
+This configuration allowed the existing push buttons on the control panel to be controlled from the board.
 
-Circuit diagram and pictures to follow.
+Each button was wired up to its own digital output pin on the controller.
+
+Rather than using relays to toggle the buttons, opto-isolators were used to avoid annoying clicking sounds.
+
+### Circuit
+Here is the wiring:
+
+![](https://bespoke.dev/assets/images/projects/iot-air-con/1.png | width=100)
+
+The buttons on the panel are still usable externally:
+
+![](https://bespoke.dev/assets/images/projects/iot-air-con/4.png | width=100)
 
 ## Software
 ### Environment Variables
-To populate WiFi credentials in the project, an environment variables file is included in the project.
-An example of this file is provided in the repository (called `example-environment.h`). This file should be renamed to `environment.h` and populated with the network credentials you wish to use.
+An environment variables file is included in the project.
 
-The network credentials list is as follows:
+An example of this file is provided in the repository (called `example-environment.h`).
+This file should be renamed to `environment.h` and populated in the project.
+
+It contains specific configuration details for your project, including WiFi passwords, and details of control pins.
+
+To specify the network credentials you wish to use, the network credentials list can be modified in the `environment.h` file as follows:
 
 ```
 const Network network_credentials[] = {
@@ -27,9 +51,9 @@ const Network network_credentials[] = {
 ### Control API
 The endpoints on the API are also configured within the `environment.h` file.
 
-The list of buttons defines the available endpoints and what pins should be toggled when the HTTP endpoints are called.
+A list of buttons is defined which specified what endpoints are available, and which control pin should be toggled when the HTTP endpoint is called.
 
-The button list is as follows:
+The button list is defined as follows, and can be modified to implement any functions:
 ```
 const Button buttons[] = {
   { "power", D1 },
@@ -42,8 +66,13 @@ const Button buttons[] = {
 };
 ```
 
-This would result in the following endpoints being available:
+This list above results in the following endpoints being available:
 * http://ipaddress/power
 * http://ipaddress/speed
+* http://ipaddress/mode
+* http://ipaddress/eco
+* http://ipaddress/time
+* http://ipaddress/up
+* http://ipaddress/down
 
-When making a web request to any of these endpoints, the microcontroller will simulate a press of the button pin specified for the endpoint.
+When making a web request to any of these endpoints, the microcontroller will simulate a press of the button using the control pin specified for the endpoint.
